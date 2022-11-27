@@ -24,6 +24,8 @@ public class UserEntity {
     private String name;
     private String mobileNo;
 
-    //This is pending part
-    private List<TicketEntity> listOfTickets;
+
+    //Parent Class
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<TicketEntity> ticketEntities;
 }

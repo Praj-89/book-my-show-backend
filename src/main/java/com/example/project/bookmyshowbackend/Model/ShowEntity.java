@@ -1,14 +1,18 @@
 package com.example.project.bookmyshowbackend.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -22,11 +26,38 @@ public class ShowEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private Date date;
-    private Time time;
+    @Column(name = "show_date",columnDefinition = "DATE",nullable = false)
+    private LocalDate date;
 
-    @CreatedDate
-    Date created_at;
+    @Column(name = "show_time",columnDefinition = "TIME",nullable = false)
+    private LocalTime time;
+
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at")
+    private Date created_at;
+
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "updated_at")
+    private Date updatedAt;
+
+    @ManyToOne
+    @JsonIgnore
+    private MovieEntity movie;
+
+    @ManyToOne
+    @JsonIgnore
+    private TheaterEntity theater;
+
+    @OneToMany(mappedBy = "show", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<TicketEntity> tickets;
+
+    @OneToMany(mappedBy = "show",cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<ShowSeatsEntity> seats;
+
 
 
 

@@ -6,9 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,20 +23,33 @@ public class TicketEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String alloted_seats;
+    @Column(name = "alloted_seats",nullable = false)
+    private String allotedSeats;
 
-    private int amount;
+    @Column(name = "amount",nullable = false)
+    private double amount;
 
-    @CreationTimestamp
-    Date createdOn;
+    @CreatedDate
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "booked_at",nullable = false)
+    private Date bookedAt;
 
-    //Child's class
+    //Child class
     @ManyToOne
     @JoinColumn
     @JsonIgnore
-    UserEntity user; //Foreign Key To connect user table
+    private UserEntity user; //Foreign Key To connect user table
 
     //showEntity
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn
+    private ShowEntity show;
+
+
     //listOfShowEntity
+    @OneToMany(mappedBy = "show",cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<ShowSeatsEntity> seats;
 
 }

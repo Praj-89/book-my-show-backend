@@ -1,5 +1,6 @@
 package com.example.project.bookmyshowbackend.Model;
 
+import com.example.project.bookmyshowbackend.enums.SeatType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,15 +8,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "show_seats")
-public class ShowSeatsEntity {
+@Table(name = "theater_seats")
+public class TheaterSeatsEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,18 +24,15 @@ public class ShowSeatsEntity {
     @Column(name = "seat_number",nullable = false)
     private String seatNumber;
 
-    @Column(name = "is_booked",columnDefinition = "bit(1) default 0",nullable = false)
-    private boolean booked;
+    @Column(name = "rate" , nullable = false)
+    private int rate;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "booked_at")
-    private Date bookedAt;
-
-    @ManyToOne
-    @JsonIgnore
-    private ShowEntity show;
+    @Enumerated(EnumType.STRING)
+    @Column(name ="seat_type",nullable = false)
+    private SeatType seatType;
 
     @ManyToOne
     @JsonIgnore
-    private TicketEntity ticket;
+    @JoinColumn
+    private TheaterEntity theater;
 }
